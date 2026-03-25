@@ -1,0 +1,95 @@
+#pragma once
+
+namespace Kernel
+{
+	namespace Security
+	{
+		namespace Cipher
+		{
+
+			enum ModeOfOperation
+			{
+				MODE_ECB,
+				MODE_CBC,
+				MODE_OFB,
+				MODE_CFB,
+				MODE_CBC_CTS,
+				MODE_XTS,
+				MODE_CCM,
+				MODE_EAX,
+				MODE_GCM,
+				MODE_OCB,
+			};
+
+			enum ConfidentialityMode
+			{
+				CONFIDENTIAL_ECB,
+				CONFIDENTIAL_CBC,
+				CONFIDENTIAL_CTR,
+				CONFIDENTIAL_OFB
+			};
+
+			enum AuthenticatedEncryptionMode
+			{
+				AUTHENTICATED_CCM,
+				AUTHENTICATED_EAX,
+				AUTHENTICATED_GCM_2K,
+				AUTHENTICATED_GCM_64K
+			};
+
+			enum BlockCipherAlgorithms
+			{
+				CIPHER_AES,
+				CIPHER_ARIA,
+				CIPHER_ARC4,
+				CIPHER_BLOWFISH,
+				CIPHER_BTEA,
+				CIPHER_CHAM64,
+				CIPHER_CHAM128,
+				CIPHER_CAMELLIA,
+				CIPHER_CAST128,
+				CIPHER_CAST256,
+				CIPHER_DES,
+				CIPHER_2KEY_TRIPLE_DES,
+				CIPHER_3KEY_TRIPLE_DES,
+				CIPHER_DESX,
+				CIPHER_GOST,
+				CIPHER_HIGHT,
+				CIPHER_IDEA,
+				CIPHER_LEA,
+				CIPHER_LUBY_RACKOFF,
+				CIPHER_KALYNA128,
+				CIPHER_KALYNA256,
+				CIPHER_KALYNA512,
+				CIPHER_MARS,
+				CIPHER_RC2,
+				CIPHER_RC5,
+				CIPHER_RC6,
+				CIPHER_SAFER_K,
+				CIPHER_SAFER_SK,
+				CIPHER_SEED,
+				CIPHER_SERPENT,
+				CIPHER_SHACAL_2,
+				CIPHER_SHARK,
+				CIPHER_SIMECK32,
+				CIPHER_SIMECK64,
+				CIPHER_SKIPJACK,
+				CIPHER_SM4,
+				CIPHER_SQUARE,
+				CIPHER_TEA,
+				CIPHER_3_WAY,
+				CIPHER_THREE_FISH,
+				CIPHER_TWO_FISH,
+				CIPHER_XTEA,
+			};
+
+			enum NonCryptographicChecksums
+			{
+				CHECKSUM_CRC32,
+				CHECKSUM_CRC32C,
+				CHECKSUM_ADLER32
+			};
+
+		}
+	}
+}

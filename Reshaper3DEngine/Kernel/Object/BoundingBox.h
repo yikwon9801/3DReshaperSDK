@@ -101,11 +101,16 @@ public:
 	inline void				SetMinMaxX(const DOUBLE iMin, const DOUBLE iMax) { m_LowerPoint._xx = iMin; m_UpperPoint._xx = iMax; }
 	inline void				SetMinMaxY(const DOUBLE iMin, const DOUBLE iMax) { m_LowerPoint._yy = iMin; m_UpperPoint._yy = iMax; }
 	inline void				SetMinMaxZ(const DOUBLE iMin, const DOUBLE iMax) { m_LowerPoint._zz = iMin; m_UpperPoint._zz = iMax; }
+	inline void				SetUpperPoint(const CGPointDouble & iPoint) { m_UpperPoint = iPoint; }
+	inline void				SetLowerPoint(const CGPointDouble & iPoint) { m_LowerPoint = iPoint; }
 public:
 	inline void				Init(const CGPointDouble & iUpper, const CGPointDouble & iLower) { m_UpperPoint = iUpper; m_LowerPoint = iLower; }
 	inline void				Init() { m_UpperPoint.SetCoordinate(-DBL_MAX, -DBL_MAX, -DBL_MAX); m_LowerPoint.SetCoordinate(DBL_MAX, DBL_MAX, DBL_MAX); }
 public:
 	void					Set(const CGTriangle & iTriangle);
+	void					Set(const CGPointDouble & iP1, const CGPointDouble & iP2, const CGPointDouble & iP3);
+	void					Set(const CGPointDouble & iP1, const CGPointDouble & iP2);
+	void					Set(const Coordinate3D & iP1, const Coordinate3D & iP2);
 #pragma endregion
 
 #pragma region General Function
@@ -131,6 +136,7 @@ public:
 	void					Intersect(const CBoundingBox & iBoundingBox);
 
 	const CRectDouble		ToRectDouble() const;
+	const CGRectangle2D		ToRectangle2D() const;
 	const CGRectangle		GetBottom() const;
 	const CGRectangle		GetTop() const;
 	const CGRectangle		GetRectangle2D(const DOUBLE iZ = 0.) const;
@@ -225,10 +231,12 @@ public:
 #pragma region Static fuction
 public:
 	static const INT		CalculateBoundingBox(const vector<Coordinate2D> & iCoordinates, CBoundingBox & oBoundingBox, CGPoint2DDouble & oCenteroid);
+	static const INT		CalculateBoundingBox(const vector<Coordinate3D> & iCoordinates, CBoundingBox & oBoundingBox, CGPointDouble & oCenteroid);
 	static const INT		CalculateBoundingBox(const vector<CGVertex> & iVertices, CBoundingBox & oBoundingBox, CGPointDouble & oCenteroid);
 	static const INT		CalculateBoundingBox(const CTableArray<CGVertex> & iVertices, CBoundingBox & oBoundingBox, CGPointDouble & oCenteroid);
 	static const INT		CalculateBoundingBox(const CTableArray<CGVertex> & iVertices, CBoundingBox & oBoundingBox, const CMatrix3x4 & iMatrix);
 	static void				CalculateBoundingBox(const CGPointDouble iPoints[], const UINT iArraySize, CBoundingBox & oBoundingBox, CGPointDouble & oCenteroid);
+	static void				CalculateBoundingBoxes(const vector<UINT> & iSeparators, const vector<Coordinate3D> & iCoordinates, vector<CBoundingBox> & oBoundingBoxes);
 	static const CVector2D	Get2DVectorToFit(const CBoundingBox & iBoundingBox1, const CBoundingBox & iBoundingBox2);
 	static const DOUBLE		GetMarginDistance();
 	static const CBoundingBox	Union(const CBoundingBox & iBoundingBox1, const CBoundingBox & iBoundingBox2);

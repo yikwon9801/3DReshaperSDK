@@ -27,13 +27,18 @@ namespace Kernel
 
 		namespace Geometry
 		{
+			RsDEFINE_CLASS(CGPolygon);
+			RsDEFINE_CLASS(CGPolygons);
+			RsDEFINE_CLASS(CGPolygons2D);
+			RsDEFINE_CLASS(CGTriangle);
+			RsDEFINE_CLASS(CGTriangle2D);
+			RsDEFINE_CLASS(CGTriangles);
+			RsDEFINE_CLASS(CGTriangles2D);
+
 			using namespace Kernel::Collection;
 			using namespace Kernel::Math;
 			using namespace Kernel::Util;
-
-			RsDEFINE_CLASS(CGPolygons2D);
-			RsDEFINE_CLASS(CGTriangle);
-			RsDEFINE_CLASS(CGTriangles);
+			using namespace Kernel::Object::Geometry;
 
 RsDEFINE_DLL_CLASS(CGPolygon2D) : RsINHERITANCE(CGeometryObject)
 {
@@ -63,6 +68,10 @@ protected:
 
 #pragma region General Function
 public:
+	void					SetPolygon(const vector<Coordinate3D> & iPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS);
+	void					SetPolygon(const CGPolygon & iPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS);
+	void					Set(FLOAT * iArray, const UINT iNumberOfVertex);
+public:
 	void					Clear();
 	void					Release();
 	void					RemovePoint(const UINT iIndex);
@@ -82,7 +91,8 @@ public:
 	void					Get(FLOAT * oArray) const;
 	void					Get(vector<pair<DOUBLE, DOUBLE>> & oPoints) const;
 	void					Get(CGPolygons2D & oPolygons) const;
-	void					Set(FLOAT * iArray, const UINT iNumberOfVertex);
+	void					Get(vector<Coordinate3D> & oPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
+	void					Get(CGPolygon & oPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
 protected:
 	const BOOL				IsEqual(const CGPolygon2D & iPolygon) const;
 
@@ -90,10 +100,17 @@ public:
 	virtual void			Close();
 	virtual void			Open();
 	virtual const BOOL		IsClosed() const;
+	virtual const DOUBLE	GetLength() const;
+
 #pragma endregion
 
 #pragma region CAD Functions
 public:
+	void					Union();
+	void					Difference(const CGPolygon2D & iPolygon);
+	void					Offset(const DOUBLE iOffsetDistance, const UINT16 iOption = 0);
+	void					Intersect(const CGPolygon2D & iPolygon);
+
 	void					ChangeStartingPoint(const UINT iIndex);
 
 	const DOUBLE			Area(const UINT iStart, const UINT iEnd) const;
@@ -106,6 +123,7 @@ public:
 
 	CGPolyhedron *			Reconstruct2D(const UINT16 iType = 0) const;
 	const INT				Triangulate(CGTriangles & oTriangles) const;
+	const INT				Triangulate(CGTriangles2D & oTriangles) const;
 
 public:
 	virtual const DOUBLE	Area() const;
@@ -172,6 +190,8 @@ public:
 #pragma region Static fuction
 public:
 	static const DOUBLE		Area(const _VertexVector & iPolygon, const UINT iStart, const UINT iEnd);
+	static const BOOL		CopyCoordinatesFromPolygon(const vector<Coordinate2D> & iPolygon2D, vector<Coordinate3D> & oPolygon3D, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS, const BOOL iReCreate = TRUE);
+	static const BOOL		CopyCoordinatesFromPolygon(const vector<Coordinate3D> & iPolygon2D, vector<Coordinate2D> & oPolygon3D, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS, const BOOL iReCreate = TRUE);
 #pragma endregion
 
 #pragma region Memeber Variable

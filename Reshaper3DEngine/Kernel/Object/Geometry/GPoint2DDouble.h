@@ -57,6 +57,7 @@ public:
 	CGPoint2DDouble();
 	CGPoint2DDouble(const CPoint & iPoint);
 	CGPoint2DDouble(const Coordinate2D & iPoint);
+	CGPoint2DDouble(const Coordinate3D & iPoint);
 	CGPoint2DDouble(const CGPoint2DDouble & iPoint);
 	CGPoint2DDouble(const CGPoint2DInt & iPoint);
 	CGPoint2DDouble(const CDimension2D & iDimension);
@@ -78,6 +79,7 @@ public:
 		for (UINT ii = 0; ii < 2; ii++)
 			value[ii] = _val[ii];
 	}
+	inline const Coordinate2D	ToCooridnate2D() const { return { _xx,_yy }; }
 public:
 	inline void				SetX(const DOUBLE iX)	{ _xx = iX; }
 	inline void				SetY(const DOUBLE iY)	{ _yy = iY; }
@@ -137,6 +139,7 @@ public:
 	const CGPoint2DDouble & operator = (const CPoint & iPoint);
 	const CGPoint2DDouble & operator = (const CGPointDouble & iPoint);
 	const CGPoint2DDouble & operator = (const Coordinate2D & iPoint);
+	const CGPoint2DDouble & operator = (const Coordinate3D & iPoint);
 	const CGPoint2DDouble & operator = (const CGVertex & iVertex);
 	const CGPoint2DDouble & operator = (const CDimension2D & iDimension);
 	const CGPoint2DDouble	operator + (const DOUBLE iValue) const;

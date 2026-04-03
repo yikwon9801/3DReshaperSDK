@@ -12,7 +12,6 @@ namespace Kernel
 		RsDEFINE_CLASS(CPolygonObject);
 
 		using namespace Kernel::Object;
-		using namespace ClipperLib;
 
 RsDEFINE_DLL_CLASS(CPolygonSet) : RsINHERITANCE(CPolygonObject)
 {
@@ -22,8 +21,8 @@ RsDEFINE_DLL_CLASS(CPolygonSet) : RsINHERITANCE(CPolygonObject)
 #pragma region Construction & Destruction
 public:
 	CPolygonSet();
-	CPolygonSet(const ClipperLib::Paths * iPolygons);
-	CPolygonSet(const ClipperLib::Paths & iPolygons);
+	CPolygonSet(const Paths * iPolygons);
+	CPolygonSet(const Paths & iPolygons);
 	CPolygonSet(const CPolygonSet & iPolygonSet);
 	virtual ~CPolygonSet();
 #pragma endregion
@@ -63,7 +62,7 @@ protected:
 #pragma region Operator Declaration
 public:
 	const CPolygonSet &		operator = (const CPolygonSet & iPolygonSet);
-	const CPolygonSet &		operator = (const ClipperLib::Paths & iPolygons);
+	const CPolygonSet &		operator = (const Paths & iPolygons);
 	const CPolygonSet 		operator ^ (const CPolygonSet & iPolygonSet) const;
 	void					operator ^= (const CPolygonSet & iPolygonSet);
 	const CPolygonSet 		operator | (const CPolygonSet & iPolygonSet) const;

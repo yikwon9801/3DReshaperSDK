@@ -65,6 +65,12 @@ private:																		\
 	}AXISTYPE;
 	typedef enum
 	{
+		AXIS2DTYPE_XYAXIS,
+		AXIS2DTYPE_YZAXIS,
+		AXIS2DTYPE_XZAXIS
+	}AXIS2DTYPE;
+	typedef enum
+	{
 		DIRECTION2DSIDE_LEFT,
 		DIRECTION2DSIDE_RIGHT,
 	}DIRECTION2DSIDE;
@@ -72,6 +78,29 @@ private:																		\
 	typedef enum { AdjacentFieldTypeNoOverlap, AdjacentFieldTypeHorizontal, AdjacentFieldTypeVertical, AdjacentFieldTypeDiagonal }AdjacentFieldType;
 
 // Definition struct
+	typedef struct __coordinate3d
+	{
+		__coordinate3d() : _xx(0.), _yy(0.), _zz(0.) {}
+		__coordinate3d(const DOUBLE iX, const DOUBLE iY, const DOUBLE iZ) : _xx(iX), _yy(iY), _zz(iZ) {}
+		inline void Init(const DOUBLE iX, const DOUBLE iY, const DOUBLE iZ) { _xx = iX;	_yy = iY; _zz = iZ; }
+		void operator *= (const DOUBLE iValue) { _xx *= iValue; _yy *= iValue; _zz *= iValue; }
+		void operator /= (const DOUBLE iValue) { _xx /= iValue; _yy /= iValue; _zz /= iValue; }
+		const __coordinate3d operator * (const DOUBLE iValue) const { __coordinate3d tmp = *this; tmp *= iValue; return tmp; }
+		const __coordinate3d operator / (const DOUBLE iValue) const { __coordinate3d tmp = *this; tmp /= iValue; return tmp; }
+		void operator += (const __coordinate3d & iCoord) { _xx += iCoord._xx; _yy += iCoord._yy; _zz += iCoord._zz; }
+		void operator -= (const __coordinate3d & iCoord) { _xx -= iCoord._xx; _yy -= iCoord._yy; _zz -= iCoord._zz; }
+		const __coordinate3d operator + (const __coordinate3d & iCoord) const { __coordinate3d tmp = *this; tmp += iCoord; return tmp; }
+		const __coordinate3d operator - (const __coordinate3d & iCoord) const { __coordinate3d tmp = *this; tmp -= iCoord; return tmp; }
+		const BOOL operator == (const __coordinate3d & iCoord) const { return _xx == iCoord._xx && _yy == iCoord._yy && _zz == iCoord._zz; }
+		const BOOL operator != (const __coordinate3d & iCoord) const { return _xx != iCoord._xx || _yy != iCoord._yy || _zz != iCoord._zz; }
+		const DOUBLE Dot(const __coordinate3d & iCoord) const { return _xx * iCoord._xx + _yy * iCoord._yy + _zz * iCoord._zz; }
+		const __coordinate3d Cross(const __coordinate3d & iCoord) const { return { _yy * iCoord._zz - _zz * iCoord._yy, _zz * iCoord._xx - _xx * iCoord._zz, _xx * iCoord._yy - _yy * iCoord._xx }; }
+		union {
+			struct { DOUBLE _xx, _yy, _zz; };
+			DOUBLE _val[3];
+		};
+	}Coordinate3D, *pCoordinate3D;
+
 	typedef struct __coordinate2d
 	{
 		__coordinate2d() : _xx(0.), _yy(0.) {}
@@ -87,21 +116,122 @@ private:																		\
 		const __coordinate2d operator - (const __coordinate2d & iCoord) const { __coordinate2d tmp = *this; tmp -= iCoord; return tmp; }
 		const BOOL operator == (const __coordinate2d & iCoord) const { return _xx == iCoord._xx && _yy == iCoord._yy; }
 		const BOOL operator != (const __coordinate2d & iCoord) const { return _xx != iCoord._xx || _yy != iCoord._yy; }
+		const DOUBLE Dot(const __coordinate2d & iCoord) const { return _xx * iCoord._xx + _yy * iCoord._yy; }
+		const DOUBLE Cross(const __coordinate2d & iCoord) const { return _xx * iCoord._yy - _yy * iCoord._xx; }
 		union {
 			struct { DOUBLE _xx, _yy; };
 			DOUBLE _val[2];
 		};
 	}Coordinate2D, *pCoordinate2D;
 
+	typedef struct __linecoordinate3d
+	{
+		__linecoordinate3d() {}
+		__linecoordinate3d(const Coordinate3D & iDeparture, const Coordinate3D & iArrival) : _Departure(iDeparture), _Arrival(iArrival) {}
+		__linecoordinate3d(const DOUBLE iDepartureX, const DOUBLE iDepartureY, const DOUBLE iDepartureZ, const DOUBLE iArrivalX, const DOUBLE iArrivalY, const DOUBLE iArrivalZ) : _Departure(iDepartureX, iDepartureY, iDepartureZ), _Arrival(iArrivalX, iArrivalY, iArrivalZ) {}
+		inline void Init(const Coordinate3D & iDeparture, const Coordinate3D & iArrival) { _Departure = iDeparture;	_Arrival = iArrival; }
+		static void ToLineLists(const vector<vector<Coordinate3D>> & iPolygons, vector<vector<__linecoordinate3d>> & oLineLists)
+		{
+			oLineLists.resize(iPolygons.size());
+			for (UINT ii = 0; ii < (UINT)iPolygons.size(); ii++)
+			{
+				vector<__linecoordinate3d> & iLineList	= oLineLists[ii];
+				const vector<Coordinate3D> & iPolygon	= iPolygons[ii];
+				if (iPolygon.size() < 2) continue;
+
+				iLineList.resize(iPolygon.size() - 1);
+				for (UINT jj = 1; jj < (UINT)iPolygon.size(); jj++)
+				{
+					__linecoordinate3d & iLine = iLineList[jj - 1];
+
+					iLine._Departure	= iPolygon[jj - 1];
+					iLine._Arrival		= iPolygon[jj];
+				}
+			}
+		}
+		union {
+			struct { Coordinate3D _Departure, _Arrival; };
+			Coordinate3D _val[3];
+		};
+	}LineCoordinate3D, *pLineCoordinate3D;
+
 	typedef struct __linecoordinate2d
 	{
 		__linecoordinate2d() {}
 		__linecoordinate2d(const DOUBLE iDepartureX, const DOUBLE iDepartureY, const DOUBLE iArrivalX, const DOUBLE iArrivalY) : _Departure(iDepartureX, iDepartureY), _Arrival(iArrivalX, iArrivalY) {}
+		inline void Init(const Coordinate2D & iDeparture, const Coordinate2D & iArrival) { _Departure = iDeparture;	_Arrival = iArrival; }
+		static void ToLineLists(const vector<vector<Coordinate2D>> & iPolygons, vector<vector<__linecoordinate2d>> & oLineLists)
+		{
+			oLineLists.resize(iPolygons.size());
+			for (UINT ii = 0; ii < (UINT)iPolygons.size(); ii++)
+			{
+				vector<__linecoordinate2d> & iLineList	= oLineLists[ii];
+				const vector<Coordinate2D> & iPolygon	= iPolygons[ii];
+				if (iPolygon.size() < 2) continue;
+
+				iLineList.resize(iPolygon.size() - 1);
+				for (UINT jj = 1; jj < (UINT)iPolygon.size(); jj++)
+				{
+					__linecoordinate2d & iLine = iLineList[jj - 1];
+
+					iLine._Departure	= iPolygon[jj - 1];
+					iLine._Arrival		= iPolygon[jj];
+				}
+			}
+		}
 		union {
 			struct { Coordinate2D _Departure, _Arrival; };
 			Coordinate2D _val[2];
 		};
 	}LineCoordinate2D, *pLineCoordinate2D;
+
+#ifdef use_int32
+	typedef int cInt;
+	static cInt const loRange = 0x7FFF;
+	static cInt const hiRange = 0x7FFF;
+#else
+	typedef signed long long cInt;
+	static cInt const loRange = 0x3FFFFFFF;
+	static cInt const hiRange = 0x3FFFFFFFFFFFFFFFLL;
+	typedef signed long long long64;     //used by Int128 class
+	typedef unsigned long long ulong64;
+
+#endif
+
+	struct IntPoint {
+		cInt X;
+		cInt Y;
+#ifdef use_xyz
+		cInt Z;
+		IntPoint(cInt x = 0, cInt y = 0, cInt z = 0) : X(x), Y(y), Z(z) {};
+#else
+		IntPoint(cInt x = 0, cInt y = 0) : X(x), Y(y) {};
+#endif
+
+		friend inline bool operator== (const IntPoint& a, const IntPoint& b)
+		{
+			return a.X == b.X && a.Y == b.Y;
+		}
+		friend inline bool operator!= (const IntPoint& a, const IntPoint& b)
+		{
+			return a.X != b.X || a.Y != b.Y;
+		}
+		friend inline IntPoint operator - (const IntPoint& a, const IntPoint& b)
+		{
+			return IntPoint(a.X - b.X, a.Y - b.Y);
+		}
+		friend inline IntPoint operator * (const IntPoint& a, const UINT64 iValue)
+		{
+			return IntPoint(a.X * iValue, a.Y * iValue);
+		}
+		friend inline IntPoint operator / (const IntPoint& a, const UINT64 iValue)
+		{
+			return IntPoint(a.X / iValue, a.Y / iValue);
+		}
+	};
+	typedef std::vector<IntPoint> Path;
+	typedef std::vector<Path> Paths;
+	struct IntRect { cInt left; cInt top; cInt right; cInt bottom; };
 
 	typedef struct __ImageInfo
 	{

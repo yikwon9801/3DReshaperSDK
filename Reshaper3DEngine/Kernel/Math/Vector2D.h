@@ -40,8 +40,12 @@ public:
 	CVector2D(const CGPointDouble & iPoint);
 	CVector2D(const CVector2D & iVector);
 	CVector2D(const CVector & iVector);
+	CVector2D(const Coordinate3D & iPoint);
+	CVector2D(const Coordinate2D & iPoint);
 	CVector2D(const DOUBLE iVector[]);
+	CVector2D(const CGPointDouble & iDeparture, const CGPointDouble & iArrival);
 	CVector2D(const CGPoint2DDouble & iDeparture, const CGPoint2DDouble & iArrival);
+	CVector2D(const Coordinate3D & iDeparture, const Coordinate3D & iArrival);
 	CVector2D(const Coordinate2D & iDeparture, const Coordinate2D & iArrival);
 	CVector2D(const DOUBLE iDepartureX, const DOUBLE iDepartureY, const DOUBLE iArrivalX, const DOUBLE iArrivalY);
 	CVector2D(const DOUBLE iX, const DOUBLE iY);
@@ -60,7 +64,9 @@ public:
 	inline void				SetCoordinate(const DOUBLE iX, const DOUBLE iY) { _xx = iX;	_yy = iY; }
 
 public:
+	void					Init(const CGPointDouble & iDeparture, const CGPointDouble & iArrival);
 	void					Init(const CGPoint2DDouble & iDeparture, const CGPoint2DDouble & iArrival);
+	void					Init(const Coordinate3D & iDeparture, const Coordinate3D & iArrival);
 	void					Init(const Coordinate2D & iDeparture, const Coordinate2D & iArrival);
 	void					Init(const DOUBLE iDepartureX, const DOUBLE iDepartureY, const DOUBLE iArrivalX, const DOUBLE iArrivalY);
 	void					Init(const DOUBLE iX, const DOUBLE iY);

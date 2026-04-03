@@ -33,6 +33,7 @@ namespace Kernel
 		RsDEFINE_CLASS(CMath);
 		RsDEFINE_CLASS(CMatrix2x2);
 		RsDEFINE_CLASS(CMatrix3x3);
+		RsDEFINE_CLASS(CMatrix3x4);
 		RsDEFINE_CLASS(CVector);
 		RsDEFINE_CLASS(CVector2D);
 

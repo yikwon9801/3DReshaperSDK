@@ -16,6 +16,8 @@ namespace Kernel
 	namespace Math
 	{
 		RsDEFINE_CLASS(CVector);
+		RsDEFINE_CLASS(CMatrix2x2);
+		RsDEFINE_CLASS(CMatrix2x3);
 		RsDEFINE_CLASS(CMatrix3x3);
 		RsDEFINE_CLASS(CMatrix3x4);
 	}
@@ -50,16 +52,24 @@ public:
 #pragma region Setter & Getter function
 public:
 	inline const CGPointDouble &	GetPoint(const UINT iIndex) const { return m_Points[iIndex]; }
+	inline CGPointDouble &	Point(const UINT iIndex) { return m_Points[iIndex];	}
 
 	void					Get(CGPointDouble oPoints[]) const;
 	void					Get(CGPolygons2D & oPolygons2D) const;
 	void					Get(CGPolygon2D & oPolygon2D) const;
+	void					Get(CGPointDouble & oP1, CGPointDouble & oP2, CGPointDouble & oP3) const;
+	void					Get(CGPoint2DDouble & oP1, CGPoint2DDouble & oP2, CGPoint2DDouble & oP3) const;
+	void					Get(Coordinate3D & oP1, Coordinate3D & oP2, Coordinate3D & oP3) const;
+	void					Get(Coordinate2D & oP1, Coordinate2D & oP2, Coordinate2D & oP3) const;
 public:
-	inline void				SetPoint1(const CGPointDouble & iPoint) { SetPoint(0, iPoint); }
-	inline void				SetPoint2(const CGPointDouble & iPoint) { SetPoint(1, iPoint); }
-	inline void				SetPoint3(const CGPointDouble & iPoint) { SetPoint(2, iPoint); }
+	inline void				SetPoint1(const CGPointDouble & iPoint) { m_Points[0] = iPoint; }
+	inline void				SetPoint2(const CGPointDouble & iPoint) { m_Points[1] = iPoint; }
+	inline void				SetPoint3(const CGPointDouble & iPoint) { m_Points[2] = iPoint; }
 	inline void				SetPoint(const UINT iIndex, const CGPointDouble & iPoint) { m_Points[iIndex] = iPoint; }
-	inline void				SetPoint(const CGPointDouble & iPoint1, const CGPointDouble & iPoint2, const CGPointDouble & iPoint3) { SetPoint1(iPoint1); SetPoint2(iPoint2); SetPoint3(iPoint3); }
+	inline void				SetPoint(const CGPointDouble & iPoint1, const CGPointDouble & iPoint2, const CGPointDouble & iPoint3) { m_Points[0] = iPoint1; m_Points[1] = iPoint2; m_Points[2] = iPoint3; }
+	inline void				SetPoint(const CGPoint2DDouble & iPoint1, const CGPoint2DDouble & iPoint2, const CGPoint2DDouble & iPoint3) { m_Points[0] = iPoint1; m_Points[1] = iPoint2; m_Points[2] = iPoint3; }
+	inline void				SetPoint(const Coordinate3D & iPoint1, const Coordinate3D & iPoint2, const Coordinate3D & iPoint3) { m_Points[0].SetCoordinate(iPoint1._xx, iPoint1._yy, iPoint1._zz); m_Points[1].SetCoordinate(iPoint2._xx, iPoint2._yy, iPoint2._zz); m_Points[2].SetCoordinate(iPoint3._xx, iPoint3._yy, iPoint3._zz); }
+	inline void				SetPoint(const Coordinate2D & iPoint1, const Coordinate2D & iPoint2, const Coordinate2D & iPoint3) { m_Points[0].SetCoordinate(iPoint1._xx, iPoint1._yy, 0.); m_Points[1].SetCoordinate(iPoint2._xx, iPoint2._yy, 0.); m_Points[2].SetCoordinate(iPoint3._xx, iPoint3._yy, 0.); }
 	inline void				SetPoint(const DOUBLE iP1X, const DOUBLE iP1Y, const DOUBLE iP1Z, const DOUBLE iP2X, const DOUBLE iP2Y, const DOUBLE iP2Z, const DOUBLE iP3X, const DOUBLE iP3Y, const DOUBLE iP3Z)
 	{
 		m_Points[0].SetCoordinate(iP1X, iP1Y, iP1Z);
@@ -121,9 +131,13 @@ public:
 	const CGTriangle		operator - (const CVector & iVector) const;
 	void					operator -= (const CVector & iVector);
 	const CGTriangle		operator * (const DOUBLE iValue) const;
+	const CGTriangle		operator * (const CMatrix2x2 & iMatrix) const;
+	const CGTriangle		operator * (const CMatrix2x3 & iMatrix) const;
 	const CGTriangle		operator * (const CMatrix3x3 & iMatrix) const;
 	const CGTriangle		operator * (const CMatrix3x4 & iMatrix) const;
 	void					operator *= (const DOUBLE iValue);
+	void					operator *= (const CMatrix2x2 & iMatrix);
+	void					operator *= (const CMatrix2x3 & iMatrix);
 	void					operator *= (const CMatrix3x3 & iMatrix);
 	void					operator *= (const CMatrix3x4 & iMatrix);
 	const CGTriangle		operator / (const DOUBLE iValue) const;
@@ -144,6 +158,11 @@ public:
 	static const BOOL		IsInsideOnZ(const CGVertex & v1, const CGVertex & v2, const CGVertex & v3, const DOUBLE iZ);
 	static const BOOL		MakeSegment(const INT x1, const INT y1, const INT z1, const INT x2, const INT y2, const INT z2, const INT x3, const INT y3, const INT z3, const INT z, INT & oX1, INT & oY1, INT & oX2, INT & oY2);
 	static void				MinMaxZ(const CGPointDouble & P1, const CGPointDouble & P2, const CGPointDouble & P3, DOUBLE & oMinZ, DOUBLE & oMaxZ);
+	static const BOOL		IsOnTrianglePlane(const CGPointDouble & iPoint, const CGPointDouble & iV1, const CGPointDouble & iV2, const CGPointDouble & iV3, const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
+	static const BOOL		IsOnTriangle(const CGPointDouble & iPoint, const CGPointDouble & iV1, const CGPointDouble & iV2, const CGPointDouble & iV3, const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
+	static const BOOL		IsOnTriangle(const DOUBLE iPx, const DOUBLE iPy, const DOUBLE iPz, const DOUBLE iE1x, const DOUBLE iE1y, const DOUBLE iE1z, const DOUBLE iE2x, const DOUBLE iE2y, const DOUBLE iE2z, const DOUBLE iE3x, const DOUBLE iE3y, const DOUBLE iE3z, const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
+	static const BOOL		IsLineIntersected(const CGPointDouble & iLP1, const CGPointDouble & iLP2, const CGPointDouble & iTP1, const CGPointDouble & iTP2, const CGPointDouble & iTP3, CGPoint2DDouble * oIntersectedPoint = NULL);
+	static const BOOL		IsLineOnTriangle(const CGPointDouble & iLP1, const CGPointDouble & iLP2, const CGPointDouble & iTP1, const CGPointDouble & iTP2, const CGPointDouble & iTP3);
 protected:
 	static void				SectionZPlane(const INT x1, const INT y1, const INT z1, const INT x2, const INT y2, const INT z2, const INT x3, const INT y3, const INT z3, const INT z, INT & oX1, INT & oY1, INT & oX2, INT & oY2);
 #pragma endregion

@@ -50,6 +50,7 @@ public:
 	{
 		INTERNALDATATYPE_TABLEPOINTER, 
 		INTERNALDATATYPE_STDVECTORPOINTER,
+		INTERNALDATATYPE_STDVECTOR3DPOINTER,
 	}InternalDataType;
 	typedef enum
 	{
@@ -64,6 +65,7 @@ public:
 	CGOpenGLTable(const CTableArray<CGVertex *> & vertices, const GenDataType iType);
 	CGOpenGLTable(const CTableArray<CGVertex> & vertices, const GenDataType iType);
 	CGOpenGLTable(const vector<Coordinate2D> & vertices, const GenDataType iType);
+	CGOpenGLTable(const vector<Coordinate3D> & vertices, const GenDataType iType);
 	CGOpenGLTable(const CTableArray<CGVertex> & vertices, const CTableArray<CGFace> & face, const DRAWCOLOR iDrawColor, const GenDataType iType, const BOOL iUseNormalOfVertex = FALSE);
 	virtual ~CGOpenGLTable();
 #pragma endregion
@@ -126,6 +128,11 @@ private:
 		};
 		struct {
 			vector<Coordinate2D *> *			m_VectorCoordinate2D;
+			void *								m_Padding1;
+			void *								m_Padding2;
+		};
+		struct {
+			vector<Coordinate3D *> *			m_VectorCoordinate3D;
 			void *								m_Padding1;
 			void *								m_Padding2;
 		};

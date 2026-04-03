@@ -26,7 +26,9 @@ namespace Kernel
 		namespace Geometry
 		{
 			RsDEFINE_CLASS(CGPolygon2D);
+			RsDEFINE_CLASS(CGTriangle2D);
 			RsDEFINE_CLASS(CGTriangle);
+			RsDEFINE_CLASS(CGTriangles2D);
 			RsDEFINE_CLASS(CGTriangles);
 		}
 	}
@@ -58,6 +60,7 @@ public:
 public:
 	const BOOL				Get(CTableArray<CGVertex> & oVertices, CTableArray<CGFace> & oFaces) const;
 	const BOOL				Get(CGTriangles & oTriangles) const;
+	const BOOL				Get(CGTriangles2D & oTriangles) const;
 
 #pragma region Abstract fuction of IDataObject
 protected:

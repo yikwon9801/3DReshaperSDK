@@ -6,6 +6,7 @@ namespace Kernel
 	{
 		namespace Path
 		{
+			using namespace Kernel;
 			using namespace Kernel::Object;
 			using namespace Kernel::Object::Geometry;
 
@@ -18,14 +19,14 @@ public:
 
 #pragma region Construction & Destruction
 public:
-	CPolygonNTreeNode(ClipperLib::Path * iData = NULL, const BOOL iClosed = TRUE);
+	CPolygonNTreeNode(Kernel::Path * iData = NULL, const BOOL iClosed = TRUE);
 	virtual ~CPolygonNTreeNode();
 #pragma endregion
 
 #pragma region Setter & Getter function
 public:
 	enum { None, Positive, Negative };
-	inline ClipperLib::Path *	Data() { return m_Data; }
+	inline Kernel::Path *	Data() { return m_Data; }
 	inline const INT	GetOrientation() const { return m_Orientation; }
 	inline const CPolygonNTreeNode::_PointerChildNodes &	GetChilds() const { return m_Childs; }
 	inline const IntPoint &	GetDeparture() const { return m_Departure; }
@@ -79,7 +80,7 @@ public:
 
 #pragma region Memeber Variable
 private:
-	ClipperLib::Path *	m_Data;
+	Kernel::Path *		m_Data;
 	INT					m_Orientation;
 	_PointerChildNodes	m_Childs;
 

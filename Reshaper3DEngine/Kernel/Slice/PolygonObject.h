@@ -16,7 +16,6 @@ namespace Kernel
 	{
 		using namespace Kernel::Object;
 		using namespace Kernel::Object::Geometry;
-		using namespace ClipperLib;
 
 RsDEFINE_DLL_CLASS(CPolygonObject) : RsINHERITANCE(CDataObject)
 {
@@ -29,15 +28,15 @@ public:
 #pragma region Construction & Destruction
 protected:
 	CPolygonObject();
-	CPolygonObject(const ClipperLib::Paths & iPolygons);
+	CPolygonObject(const Paths & iPolygons);
 	CPolygonObject(const CPolygonObject & iPolygon);
 	virtual ~CPolygonObject();
 #pragma endregion
 
 #pragma region Setter & Getter function
 public:
-	inline const ClipperLib::Paths &	GetPolygons() const { return m_Polygons; }
-	inline void				SetPolygons(const ClipperLib::Paths & iPolygons) { m_Polygons = iPolygons; }
+	inline const Paths &	GetPolygons() const { return m_Polygons; }
+	inline void				SetPolygons(const Paths & iPolygons) { m_Polygons = iPolygons; }
 #pragma endregion
 
 #pragma region CAD Function
@@ -47,7 +46,7 @@ public:
 	const DOUBLE			Area() const;
 	void					Offset(const DOUBLE iOffset);
 	void					TolerenceArea(const DOUBLE iArea);
-	void					Add(const ClipperLib::Paths & iPolygons);
+	void					Add(const Paths & iPolygons);
 	
 	const IntRect			GetBoundingBox() const;
 
@@ -84,7 +83,7 @@ public:
 
 #pragma region Memeber Variable
 protected:
-	ClipperLib::Paths		m_Polygons;
+	Paths					m_Polygons;
 #pragma endregion
 };
 

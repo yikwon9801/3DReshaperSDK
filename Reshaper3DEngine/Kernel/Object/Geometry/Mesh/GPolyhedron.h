@@ -51,6 +51,8 @@ namespace Kernel
 			RsDEFINE_CLASS(CGCloud);
 			RsDEFINE_CLASS(CGTriangle);
 			RsDEFINE_CLASS(CGTriangles);
+			RsDEFINE_CLASS(CGPolygon);
+			RsDEFINE_CLASS(CGPolygons);
 
 			namespace Mesh
 			{
@@ -142,6 +144,10 @@ public:
 	const BOOL				IsPoint(const CGPointDouble & iPoint, const UINT iType = 0) const;
 	const BOOL				AddFace(const UINT iIndex1, const UINT iIndex2, const UINT iIndex3);
 	const BOOL				RemoveFaces(const _IndexVector & iIndices);
+	const BOOL				RemoveFaces(const CVector & iDirectionToRemove, const DOUBLE iAccuracy = CGPointDouble::AbsoluteAccuracyGet());
+	const BOOL				LeaveFaces(const DOUBLE iAngleToLeave, const CVector & iDirectionToLeave, const DOUBLE iAccuracy = CGPointDouble::AbsoluteAccuracyGet());
+	CGPolyhedron *			GetSubPolyhedron(const _IndexVector & iIndices) const;
+	void					ToTriangles(CGTriangles & oTriangles) const;
 protected:
 	const BOOL				IsEqual(const CGPolyhedron & iPolyhedron) const;
 
@@ -160,8 +166,14 @@ public:
 	const INT				RemoveDuplicatedFaces();
 	const INT				FixFaceNormals(const UINT iOption);
 #pragma endregion
+#pragma region Support Generation
+public:
+	const INT				ExtractPolygonListToSupport(CGPolygons & oPolygons) const;
+	const INT				CreateSGBlockStructures(const CGPolygons & iPolygonsForSG, CGPolyhedron & oResult, LPVOID ioDatas) const;
+#pragma endregion
 public:
 	const INT				Compound(const CTableList<const CGPolyhedron *> & iPolyTable, CProgress * iProgress = NULL);
+	const INT				Compound(const CGPolyhedron & iPolyhedron, CProgress * iProgress = NULL);
 	CGPolyhedron *			MakePolyhedronWithSelectedFaces() const;
 	typedef enum { EXPLODE_BYVERTEX, EXPLODE_BYFACE, EXPLODE_BYFACE2 }ExplodeType;
 	const INT				Explode(CTableArray<CGPolyhedron *> & ioTablePolyhedronToExplode, const ExplodeType iType = EXPLODE_BYFACE, CProgress * iProgress = NULL) const;
@@ -171,7 +183,12 @@ public:
 
 	CGMultiLines *			GetContourView(const CVector & iDirection) const;
 
+	const INT				GetEdgePolygon(const UINT64 iFaceIndex, vector<Coordinate3D> & oPolygon) const;
+	const INT				GetEdgePolygons(CGPolygons & oPolygons) const;
+
 	const INT				Difference(const CGPolyhedron & iPolyhedron, void * ioData);
+	const INT				Divide(const CGPolygon & iPolygon, CGPolyhedron & oOutSide, CGPolyhedron & oInSide, const UINT8 iMethod, LPVOID ioData);
+	const INT				Extrude(const CGPolygons & iPolygons, const CVector & iDirection, const DOUBLE iLength, CGPolyhedron & oResult, LPVOID ioData);
 private:
 	const CTableArray<CGPolyhedron *>	Clustering(CProgress * iProgress = NULL) const;
 	const CTableArray<CGPolyhedron *>	Segmentation(CProgress * iProgress = NULL) const;

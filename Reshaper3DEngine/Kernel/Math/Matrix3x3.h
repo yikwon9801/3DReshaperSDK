@@ -91,6 +91,7 @@ public:
 	void					InitScale(const CGPointDouble & iPointToScale);
 	void					InitScale(const CVector & iVectorToScale);
 	void					InitScale(const DOUBLE iX, const DOUBLE iY, const DOUBLE iZ);
+	void					InitMirror(const CVector & iDirectionToMirror);
 
 	void					Decompose(CVector & oScale, CQuaternion & oRotation);
 	void					Decompose(CEuler & oRotation);
@@ -99,6 +100,7 @@ public:
 	const DOUBLE			Determinant() const;
 	const CQuaternion		ToQuaternion() const;
 
+	void					OuterProduct(const CVector & iDirection);	// Compute outer product: n * n^T
 #pragma endregion
 
 #pragma region Abstract fuction of IDataObject
@@ -138,6 +140,8 @@ public:
 
 #pragma region Static fuction
 public:
+	static const CMatrix3x3	RotationMatarixByCoordinateSystem(const CMatrix3x3 & iA, const CMatrix3x3 & iB);
+	static const CMatrix3x3	RotationMatarixByCoordinateSystem(const CVector & iAx, const CVector & iAy, const CVector & iAz, const CVector & iBx, const CVector & iBy, const CVector & iBz);
 #pragma endregion
 
 #pragma region Memeber Variable

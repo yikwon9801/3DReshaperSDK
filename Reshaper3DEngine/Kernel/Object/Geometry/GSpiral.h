@@ -34,7 +34,8 @@ RsDEFINE_DLL_CLASS(CGSpiral) : RsINHERITANCE(CGeometryObject)
 #pragma region Construction & Destruction
 public:
 	CGSpiral();
-	CGSpiral(const CGPointDouble & iPoint, const DOUBLE iRadius, const CVector & iDirection);
+	CGSpiral(const CGPointDouble & iPoint, const DOUBLE iOuterRadius, const DOUBLE iOffsetDistance, const CVector & iDirection);
+	CGSpiral(const CGPointDouble & iPoint, const DOUBLE iInnerRadius, const DOUBLE iOuterRadius, const DOUBLE iOffsetDistance, const CVector & iDirection);
 	CGSpiral(const CGSpiral & rhs);
 	virtual ~CGSpiral();
 #pragma endregion
@@ -43,7 +44,8 @@ public:
 public:
 	inline const CGPointDouble &	GetCenterPoint() const	{ return m_CenterPoint; }
 	inline const CVector &	GetDirection() const	{ return m_Direction; }
-	inline const DOUBLE		GetRadius() const	{ return m_Radius; }
+	inline const DOUBLE		GetOuterRadius() const { return m_OuterRadius; }
+	inline const DOUBLE		GetInnerRadius() const { return m_InnerRadius; }
 #pragma endregion
 
 #pragma region General Function
@@ -93,15 +95,14 @@ public:
 
 #pragma region Static fuction
 public:
-	static void				CreateSpiral2D(const CGPoint2DDouble & iCenterPoint, const DOUBLE iRadius, const DOUBLE iOffsetDistance, const UINT iNumberOfPoint, vector<Coordinate2D> & oResult);
-	static void				CreateSpiral2D_BySpacing(const CGPoint2DDouble & iCenterPoint, const DOUBLE iRadius, const DOUBLE iOffsetDistance, const DOUBLE iSpacingBetweenPoints, vector<Coordinate2D> & oResult);
 #pragma endregion
 
 #pragma region Memeber Variable
 private:
 	CGPointDouble			m_CenterPoint;
 	CVector					m_Direction;
-	DOUBLE					m_Radius;
+	DOUBLE					m_OuterRadius, m_InnerRadius;
+	DOUBLE					m_OffsetDistance;
 #pragma endregion
 };
 

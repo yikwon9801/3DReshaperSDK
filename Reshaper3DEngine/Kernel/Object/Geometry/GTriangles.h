@@ -16,6 +16,8 @@ namespace Kernel
 	namespace Math
 	{
 		RsDEFINE_CLASS(CVector);
+		RsDEFINE_CLASS(CMatrix2x2);
+		RsDEFINE_CLASS(CMatrix2x3);
 		RsDEFINE_CLASS(CMatrix3x3);
 		RsDEFINE_CLASS(CMatrix3x4);
 	}
@@ -53,12 +55,17 @@ public:
 #pragma region Setter & Getter function
 public:
 	inline const _TriangleVector &	GetTriangles() const { return m_Triangles; }
+	inline _TriangleVector &	Triangles() { return m_Triangles; }
 	inline const CGTriangle	&	GetTriangle(const UINT iIndex) const { return m_Triangles[iIndex]; }
 	inline const UINT		GetCount() const { return (UINT)m_Triangles.size(); }
 public:
 	void					Get(vector<CGPointDouble> & oPoints) const;
 	void					Get(CGPointDouble oPoints[]) const;
+	void					Get(vector<Coordinate3D> & oPoints) const;
+	void					Get(vector<Coordinate2D> & oPoints) const;
 public:
+	void					Set(const vector<CGPointDouble> & iPoints);
+	void					Set(const vector<Coordinate3D> & iPoints);
 	void					Set(const vector<Coordinate2D> & iPoints, const DOUBLE iZ = 0.);
 	void					Set(const vector<CGPoint2DDouble> & iPoints, const DOUBLE iZ = 0.);
 	void					Set(const CGPolyhedron & iPolyhedron);
@@ -67,6 +74,7 @@ public:
 #pragma region General Function
 public:
 	void					AddTriangle(const CGTriangle & iTriangle);
+	void					AddTriangle(const CGPointDouble & iPoint1, const CGPointDouble & iPoint2, const CGPointDouble & iPoint3);
 	void					AddTriangles(const CGTriangles & iTriangles);
 	void					AddTriangles(const _TriangleVector & iTriangles);
 protected:
@@ -84,7 +92,7 @@ public:
 #pragma endregion
 
 #pragma region Abstract fuction of CGeometryObject
-protected:
+public:
 	virtual void			Invert();
 #pragma endregion
 
@@ -112,9 +120,13 @@ public:
 	const CGTriangles		operator - (const CVector & iVector) const;
 	void					operator -= (const CVector & iVector);
 	const CGTriangles		operator * (const DOUBLE iValue) const;
+	const CGTriangles		operator * (const CMatrix2x2 & iMatrix) const;
+	const CGTriangles		operator * (const CMatrix2x3 & iMatrix) const;
 	const CGTriangles		operator * (const CMatrix3x3 & iMatrix) const;
 	const CGTriangles		operator * (const CMatrix3x4 & iMatrix) const;
 	void					operator *= (const DOUBLE iValue);
+	void					operator *= (const CMatrix2x2 & iMatrix);
+	void					operator *= (const CMatrix2x3 & iMatrix);
 	void					operator *= (const CMatrix3x3 & iMatrix);
 	void					operator *= (const CMatrix3x4 & iMatrix);
 	const CGTriangles		operator / (const DOUBLE iValue) const;

@@ -29,6 +29,8 @@ namespace Kernel
 	{
 		RsDEFINE_CLASS(CVector2D);
 		RsDEFINE_CLASS(CVector);
+		RsDEFINE_CLASS(CMatrix2x2);
+		RsDEFINE_CLASS(CMatrix2x3);
 		RsDEFINE_CLASS(CMatrix3x3);
 		RsDEFINE_CLASS(CMatrix3x4);
 	}
@@ -62,6 +64,7 @@ public:
 	CGPointDouble(const CPoint & iPoint);
 	CGPointDouble(const CGPoint2DDouble & iPoint);
 	CGPointDouble(const Coordinate2D & iCoordinate);
+	CGPointDouble(const Coordinate3D & iCoordinate);
 	CGPointDouble(const CGPointDouble & iPoint);
 	CGPointDouble(const CGVertex & iVertex);
 	CGPointDouble(const DOUBLE iPoint[]);
@@ -77,6 +80,8 @@ public:
 	inline const DOUBLE		GetZ() const	{ return _zz; }
 	inline void				Get(DOUBLE Coordinate[]) const { for (INT ii = 0; ii < 3; ii++) Coordinate[ii] = _val[ii]; }
 	inline void				Get(INT Coordinate[], const DOUBLE iScale) const { for (INT ii = 0; ii < 3; ii++) Coordinate[ii] = (INT)((_val[ii] * iScale) + .5); }
+	inline const Coordinate2D	ToCooridnate2D() const { return { _xx,_yy }; }
+	inline const Coordinate3D	ToCooridnate3D() const { return { _xx,_yy,_zz }; }
 public:
 	inline void				SetX(const DOUBLE iX)	{ _xx = iX; }
 	inline void				SetY(const DOUBLE iY)	{ _yy = iY; }
@@ -147,6 +152,8 @@ public:
 public:
 	const CGPointDouble &	operator = (const CGPoint2DDouble & iPoint);
 	const CGPointDouble &	operator = (const CGPointDouble & iPoint);
+	const CGPointDouble &	operator = (const Coordinate3D & iPoint);
+	const CGPointDouble &	operator = (const Coordinate2D & iPoint);
 	const CGPointDouble &	operator = (const CPoint & iPoint);
 	const CGPointDouble &	operator = (const CGVertex & iVertex);
 	const CGPointDouble		operator + (const DOUBLE iValue) const;
@@ -167,9 +174,13 @@ public:
 	void					operator -= (const CVector2D & iVector);
 	void					operator -= (const CVector & iVector);
 	const CGPointDouble		operator * (const DOUBLE iValue) const;
+	const CGPointDouble		operator * (const CMatrix2x2 & iMatrix) const;
+	const CGPointDouble		operator * (const CMatrix2x3 & iMatrix) const;
 	const CGPointDouble		operator * (const CMatrix3x3 & iMatrix) const;
 	const CGPointDouble		operator * (const CMatrix3x4 & iMatrix) const;
 	void					operator *= (const DOUBLE iValue);
+	void					operator *= (const CMatrix2x2 & iMatrix);
+	void					operator *= (const CMatrix2x3 & iMatrix);
 	void					operator *= (const CMatrix3x3 & iMatrix);
 	void					operator *= (const CMatrix3x4 & iMatrix);
 	const CGPointDouble		operator / (const DOUBLE iValue) const;
@@ -185,6 +196,10 @@ public:
 #pragma region Static fuction
 public:
 	static const DOUBLE		AbsoluteAccuracyGet();
+	static const DOUBLE		Distance(const DOUBLE iPX1, const DOUBLE iPY1, const DOUBLE iPZ1, const DOUBLE iPX2, const DOUBLE iPY2, const DOUBLE iPZ2);
+	static const DOUBLE		DistSquare(const DOUBLE iPX1, const DOUBLE iPY1, const DOUBLE iPZ1, const DOUBLE iPX2, const DOUBLE iPY2, const DOUBLE iPZ2);
+	static const DOUBLE		Distance(const Coordinate3D & iP1, const Coordinate3D & iP2);
+	static const DOUBLE		DistSquare(const Coordinate3D & iP1, const Coordinate3D & iP2);
 	static const DOUBLE		DistSquare(const CGPointDouble & P1, const CGPointDouble & P2);
 	static const DOUBLE		DistSquare2D(const CGPointDouble & P1, const CGPointDouble & P2);
 	static const DOUBLE		Distance(const CGPointDouble & P1, const CGPointDouble & P2);

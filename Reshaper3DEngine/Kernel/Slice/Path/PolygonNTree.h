@@ -45,7 +45,7 @@ private:
 
 	void					_InsertTreeNodes(MultiPaths & iMultiLine, CPolygonNTreeNode & ioRoot, const UINT8 iContainType);
 	void					_InsertTreeNodes(MultiPathItems & iMultiLine, CPolygonNTreeNode & ioRoot, const UINT8 iContainType);
-	CPolygonNTreeNode *		_CreateNode(ClipperLib::Path * iPath, const BOOL iClosed = TRUE);
+	CPolygonNTreeNode *		_CreateNode(Kernel::Path * iPath, const BOOL iClosed = TRUE);
 	void					_Regist(OutlinePaths & iOutlines, const UINT8 iContainType);
 	void					_Regist(MultiMultiPathItems & iOutlines, const UINT8 iContainType);
 #pragma endregion

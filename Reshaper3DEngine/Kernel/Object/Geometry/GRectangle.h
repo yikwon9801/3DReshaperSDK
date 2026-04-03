@@ -29,6 +29,8 @@ namespace Kernel
 
 		namespace Geometry
 		{
+			RsDEFINE_CLASS(CGPolygons);
+
 			using namespace Kernel::File;
 			using namespace Kernel::Math;
 			using namespace Kernel::Util;
@@ -41,6 +43,7 @@ public:
 	CGRectangle();
 	CGRectangle(const CGPointDouble & P1, const CGPointDouble & P2, const CGPointDouble & P3, const CGPointDouble & P4);
 	CGRectangle(const CRectDouble & iRect);
+	CGRectangle(const CGRectangle2D & iRectangle);
 	CGRectangle(const CGRectangle & rhs);
 	virtual ~CGRectangle();
 #pragma endregion
@@ -58,6 +61,8 @@ public:
 	const DOUBLE			GetRadius() const;
 	const DOUBLE			GetRadius2D(const UINT16 iOption) const;
 	void					GetMultiLine(CGMultiLine & oMultiLine) const;
+
+	const CGPolygons		ToPolygons() const;
 protected:
 	const BOOL				IsEqual(const CGRectangle & iRectangle) const;
 
@@ -81,6 +86,8 @@ protected:
 protected:
 	virtual const BOOL		CopyFrom(const CDataObject & iObjectToCopy);
 	virtual CGRectangle *	Clone() const;
+protected:
+	const BOOL				CopyFrom(const CGRectangle2D & iObjectToCopy);
 #pragma endregion
 
 #pragma region File Declaration
@@ -93,6 +100,7 @@ public:
 #pragma region Operator Declaration
 public:
 	const CGRectangle &		operator = (const CGRectangle & iRectangle);
+	const CGRectangle &		operator = (const CGRectangle2D & iRectangle);
 	const CGRectangle		operator + (const CVector & iVector) const;
 	void					operator += (const CVector2D & iVector);
 	void					operator += (const CVector & iVector);

@@ -100,6 +100,7 @@ public:
 #pragma region Static fuction
 public:
 	static void				CreateCircle2D(const CGPoint2DDouble & iCenterPoint, const DOUBLE iRadius, const UINT iNumberOfPoint, vector<Coordinate2D> & oCircleLine);
+	static void				CreateCircle2D(const CGPoint2DDouble & iCenterPoint, const DOUBLE iRadius, const DOUBLE iSpacingBetweenPoints, vector<Coordinate2D> & oCircleLine);
 	static const DOUBLE		Circumference(const DOUBLE iRadius);
 	static const DOUBLE		Area(const DOUBLE iRadius);
 #pragma endregion

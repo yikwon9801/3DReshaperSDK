@@ -45,7 +45,10 @@ namespace Kernel
 			RsDEFINE_CLASS(CGMultiLine);
 			RsDEFINE_CLASS(CGMultiLines);
 			RsDEFINE_CLASS(CGLine);
+			RsDEFINE_CLASS(CGTriangles2D);
 			RsDEFINE_CLASS(CGTriangles);
+			RsDEFINE_CLASS(CGPolygon);
+			RsDEFINE_CLASS(CGPolygons);
 
 			using namespace Kernel::Primitive;
 			using namespace Kernel::Collection;
@@ -66,8 +69,11 @@ public:
 	CGPolygons2D();
 	CGPolygons2D(const CSlicedPolygon & iSlicedPolygon);
 	CGPolygons2D(const CGPolygons2D & iPolygons);
+	CGPolygons2D(const CGPolygons & iPolygons);
 	CGPolygons2D(const CGPolygon2D & iPolygons);
+	CGPolygons2D(const CGPolygon & iPolygons);
 	CGPolygons2D(const _VertexVector & iPolygons);
+	CGPolygons2D(const vector<vector<Coordinate2D>> & iPolygons);
 	CGPolygons2D(const CGMultiLine & iSlicedPolygon);
 	CGPolygons2D(const CGMultiLines & iSlicedPolygon);
 	virtual ~CGPolygons2D();
@@ -87,9 +93,13 @@ protected:
 public:
 	void					SetPolygons(const CSlicedPolygon & iSlicedPolygon);
 	void					SetPolygons(const CGPolygons2D & iPolygons2D);
-	void					SetPolygons(const vector<vector<Coordinate2D>> & iSlicedPolygon);
+	void					SetPolygons(const CGPolygons & iPolygons);
+	void					SetPolygons(const vector<vector<Coordinate2D>> & iPolygons);
+	void					SetPolygons(const vector<vector<Coordinate3D>> & iPolygons);
 	void					SetPolygon(const CGPolygon2D & iPolygon2D);
 	void					SetPolygon(const _VertexVector & iPolygon2D);
+	void					SetPolygon(const CGPolygon & iPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS);
+	void					SetPolygon(const vector<Coordinate3D> & iPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS);
 #pragma endregion
 
 #pragma region General Function
@@ -99,6 +109,7 @@ public:
 	void					AddPolygons(const vector<vector<Coordinate2D>> & iSlicedPolygon);
 	void					AddPolygon(const CGMultiLine & iPolygon);
 	void					AddPolygon(const CGPolygon2D & iPolygon);
+	void					AddPolygon(const vector<Coordinate2D> & iPolygon);
 	void					AddYLines(const CBoundingBox2D * const iLimitRect = NULL);
 	void					InsertPolygons(const UINT iIndex, const CGPolygons2D & iPolygons);
 
@@ -114,8 +125,13 @@ public:
 	void					Get(CTableList<CGMultiLine *> & oTableMultiLine) const;
 	void					Get(FLOAT * oArray) const;
 	void					Get(vector<vector<Coordinate2D>> & oPolygons) const;
+	void					Get(vector<vector<LineCoordinate2D>> & oPolygons) const;
 	void					Get(CGPolygons2D & oSolidType, CGPolygons2D & oNonSolidType) const;
 	void					Get(vector<pair<DOUBLE, DOUBLE>> & oPoints) const;
+	void					Get(vector<Coordinate3D> & oPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
+	void					Get(vector<vector<Coordinate3D>> & oPolygons, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
+	void					Get(CGPolygon & oPolygon, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
+	void					Get(CGPolygons & oPolygons, const AXIS2DTYPE iType = AXIS2DTYPE_XYAXIS) const;
 
 	void					GetSeparator(vector<INT> & oSeparators) const;
 
@@ -130,11 +146,13 @@ public:
 	virtual void			Close();
 	virtual void			Open();
 	virtual const BOOL		IsClosed() const;
+	virtual const DOUBLE	GetLength() const;
 
 #pragma endregion
 
 #pragma region CAD Functions
 public:
+	void					Fix(const UINT8 iType);
 	const INT				GetClosedPolygons(vector<UINT> & oPolygonIndices) const;
 	const INT				GetClosedPolygons(CGPolygons2D & oPolygons) const;
 	const INT				GetLongestPoint(const CVector2D & iDirection, const vector<UINT> * const iIncludePolygon = NULL, const vector<UINT> * const iExcludePolygon = NULL, Coordinate2D * oLongestPoint = NULL) const;
@@ -154,6 +172,7 @@ public:
 	const INT				IsIntersectLine(const CGLine & iLine, CGPoint2DDouble & oIntersectedPoint) const;
 	const INT				GetIntersectedPoint(const Coordinate2D & iDeparture, const Coordinate2D & iArrival, vector<Coordinate2D> & oIntersectedLine) const;
 
+	const INT				Explode(CGPolygons2D & oOuterPolygons, CGPolygons2D & oInnerPolygons) const;
 	const UINT				Explode(vector<vector<UINT>> & oExplodedPolygon) const;
 	const UINT				ProjectYAxis(const Coordinate2D & iPointToProject, Coordinate2D & oIntersectedPoint, const vector<UINT> * const iIncludePolygon = NULL, const vector<UINT> * const iExcludePolygon = NULL, vector<Coordinate2D> * iProjectedPoints = NULL, const UINT iType = 0) const;
 	const UINT				ProjectAxis(const Coordinate2D & iPointToProject, const CVector2D & iAxis, Coordinate2D & oIntersectedPoint, const vector<UINT> * const iIncludePolygon = NULL, const vector<UINT> * const iExcludePolygon = NULL, const UINT iType = 0) const;
@@ -181,6 +200,7 @@ public:
 
 	CGPolyhedron *			Reconstruct2D() const;
 	const INT				Triangulate(CGTriangles & oTriangles) const;
+	const INT				Triangulate(CGTriangles2D & oTriangles) const;
 
 	void					Solid(const DOUBLE iThickness, const UINT iSolidType = 0, const BOOL iChain = FALSE);
 	enum { ChainType_All, ChainType_Parallel };
@@ -189,6 +209,7 @@ public:
 	void					ChainParallel(const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
 	
 	const INT				ConnectOverlappedOnlyParallelVector2D(const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
+	const INT				ConnectJumpLine(const DOUBLE iAccuracy = CGPoint2DDouble::AbsoluteAccuracyGet());
 
 	const INT				ChangeVector2DPositiveDirection(const CVector2D & iDirection);
 	const INT				ChangeVector2DOrdering(const CVector2D iDirection);
@@ -240,7 +261,9 @@ public:
 protected:
 	virtual const BOOL		CopyFrom(const CDataObject & iObjectToCopy);
 	const BOOL				CopyFrom(const CGPolygon2D & iPolygon);
+	const BOOL				CopyFrom(const CGPolygon & iPolygon);
 	const BOOL				CopyFrom(const CGPolygons2D & iPolygon);
+	const BOOL				CopyFrom(const CGPolygons & iPolygons);
 	const BOOL				CopyFrom(const _VertexVector & iPolygon);
 #pragma endregion
 
@@ -259,7 +282,9 @@ private:
 #pragma region Operator Declaration
 public:
 	const CGPolygons2D &	operator = (const CGPolygons2D & iPolygons);
+	const CGPolygons2D &	operator = (const CGPolygons & iPolygons);
 	const CGPolygons2D &	operator = (const CGPolygon2D & iPolygon);
+	const CGPolygons2D &	operator = (const CGPolygon & iPolygon);
 	const CGPolygons2D &	operator = (const _VertexVector & iPolygon);
 	const CGPolygons2D		operator + (const CVector2D & iVector) const;
 	void					operator += (const CVector2D & iVector);

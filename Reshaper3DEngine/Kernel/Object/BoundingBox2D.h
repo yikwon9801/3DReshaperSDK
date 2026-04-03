@@ -90,6 +90,8 @@ public:
 	inline void				SetMinY(const DOUBLE iValue) { m_LowerPoint._yy = iValue; }
 	inline void				SetMaxX(const DOUBLE iValue) { m_UpperPoint._xx = iValue; }
 	inline void				SetMaxY(const DOUBLE iValue) { m_UpperPoint._yy = iValue; }
+	inline void				SetUpperPoint(const CGPointDouble & iPoint) { m_UpperPoint = iPoint; }
+	inline void				SetLowerPoint(const CGPointDouble & iPoint) { m_LowerPoint = iPoint; }
 	inline void				Get(FLOAT oData[]) const { oData[0] = (FLOAT)m_LowerPoint._xx; oData[1] = (FLOAT)m_LowerPoint._yy; oData[2] = (FLOAT)m_UpperPoint._xx; oData[3] = (FLOAT)m_UpperPoint._yy; }
 	void					SetValue(LPCTSTR iString, LPCTSTR iDelimiter);
 	void					Set(const CGPoint2DDouble & iOrgin, const CDimension2D & iDimension);
@@ -127,7 +129,7 @@ public:
 	const BOOL				Contain(const CGPoint2DDouble & iPointToCheck) const;
 	const BOOL				Contains(const CBoundingBox2D & iBoundingBox) const;
 
-	const BOOL				IsIntersected(const CBoundingBox2D & iBox) const;
+	const BOOL				IsIntersected(const CBoundingBox2D & iBox, const BOOL iPosition = FALSE) const;
 protected:
 	const BOOL				IsEqual(const CBoundingBox2D & iBoundingBox) const;
 

@@ -24,6 +24,13 @@ namespace Kernel
 	{
 		namespace Geometry
 		{
+			RsDEFINE_CLASS(CGTriangle);
+			RsDEFINE_CLASS(CGTriangles);
+			RsDEFINE_CLASS(CGPolygon);
+			RsDEFINE_CLASS(CGPolygons);
+			RsDEFINE_CLASS(CGPolygon2D);
+			RsDEFINE_CLASS(CGPolygons2D);
+
 			using namespace Kernel::File;
 			using namespace Kernel::Math;
 			using namespace Kernel::Util;
@@ -41,6 +48,10 @@ public:
 #pragma region Setter & Getter function
 public:
 	const CVector			GetNormal() const;
+	inline const DOUBLE		GetA() const { return _A; }
+	inline const DOUBLE		GetB() const { return _B; }
+	inline const DOUBLE		GetC() const { return _C; }
+	inline const DOUBLE		GetD() const { return _D; }
 public:
 	inline void				Init(const DOUBLE iA, const DOUBLE iB, const DOUBLE iC, const DOUBLE iD) { _A = iA; _B = iB; _C = iC; _D = iD; }
 	void					Init(const CGPointDouble & iPointOnPlane, const CVector & iNormalPlane);
@@ -48,13 +59,16 @@ protected:
 	void					SetNormal(const CVector & iNormal);
 #pragma endregion
 
+#pragma region General function
 public:
 	const CGPointDouble		Project(const CGPointDouble & iPointToProject) const;
 	const INT				Project(const CGPointDouble & iDeparture, const CVector & iDirection, CGPointDouble & oProjectedPoint) const;
+
 protected:
 	const CGPointDouble		Interpolate(const DOUBLE iU, const DOUBLE iV) const;
 
 	const BOOL				IsEqual(const CGPlane & iPlane) const;
+#pragma endregion
 
 #pragma region Abstract fuction of CGeometryObject
 protected:

@@ -52,10 +52,11 @@ public:
 #pragma region Setter & Getter function
 public:
 	inline const CGPoint2DDouble &	GetPoint(const UINT iIndex) const	{ return m_Points[iIndex]; }
-
-	void					Get(CGPolygons2D & oPolygons) const;
 public:
 	inline void				SetRectangle(const CGPoint2DDouble & P1, const CGPoint2DDouble & P2, const CGPoint2DDouble & P3, const CGPoint2DDouble & P4);
+	inline void				SetPoint(const UINT iIndex, const CGPoint2DDouble & iPoint) { m_Points[iIndex] = iPoint; }
+public:
+	void					Get(CGPolygons2D & oPolygons) const;
 #pragma endregion
 
 #pragma region General Function

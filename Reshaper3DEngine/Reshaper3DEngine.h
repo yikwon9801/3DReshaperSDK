@@ -15,6 +15,7 @@
 #include "Kernel/InterProcess/NamedPipe/CNamedPipeServer.h"
 #include "Kernel/Primitive/Primitive.h"
 #include "Kernel/Primitive/RectDouble.h"
+#include "Kernel/String/HyFont.h"
 #include "Kernel/String/HyString.h"
 #include "Kernel/String/KeyString.h"
 #include "Kernel/File/FileBase.h"
@@ -103,7 +104,9 @@
 #include "Kernel/Object/Geometry/GVertex2D.h"
 #include "Kernel/Object/Geometry/GVertex.h"
 #include "Kernel/Object/Geometry/GPolygon2D.h"
+#include "Kernel/Object/Geometry/GPolygon.h"
 #include "Kernel/Object/Geometry/GPolygons2D.h"
+#include "Kernel/Object/Geometry/GPolygons.h"
 #include "Kernel/Object/Geometry/Mesh/GFace.h"
 #include "Kernel/Object/Geometry/GMultiLine2D.h"
 #include "Kernel/Object/Geometry/GMultiLine.h"
@@ -113,6 +116,7 @@
 #include "Kernel/Object/Geometry/GCross2D.h"
 #include "Kernel/Object/Geometry/GCircle2D.h"
 #include "Kernel/Object/Geometry/GCircle.h"
+#include "Kernel/Object/Geometry/GSpiral2D.h"
 #include "Kernel/Object/Geometry/GSpiral.h"
 #include "Kernel/Object/Geometry/GEllipse2D.h"
 #include "Kernel/Object/Geometry/GEllipse.h"
@@ -121,9 +125,11 @@
 #include "Kernel/Object/Geometry/GPedestal.h"
 #include "Kernel/Object/Geometry/GTriangle2D.h"
 #include "Kernel/Object/Geometry/GTriangle.h"
+#include "Kernel/Object/Geometry/GTriangles.h"
 #include "Kernel/Object/Geometry/GCloud.h"
 #include "Kernel/Object/Geometry/GCloud2D.h"
 #include "Kernel/Object/Geometry/GSegment2D.h"
+#include "Kernel/Object/Geometry/GText.h"
 #include "Kernel/Object/Geometry/Mesh/GEdge.h"
 #include "Kernel/Object/Geometry/Mesh/GPolyhedron.h"
 #include "Kernel/Object/Vision/Camera.h"
@@ -145,9 +151,8 @@
 #include "Kernel/Object/Print/MaterialPreference.h"
 #include "Kernel/Object/Print/SlicePreference.h"
 #include "Kernel/Position/Window/WinPointDouble.h"
-#include "ThirdParty/Polygon/clipper.hpp"
 #include "Kernel/Slice/PolygonObject.h"
-#include "ThirdParty/B9/Polygons.h"
+#include "Kernel/Object/Geometry/Polygon/Polygons.h"
 #include "Kernel/Slice/PolygonSet.h"
 #include "Kernel/Slice/Segment2D.h"
 #include "Kernel/Slice/SlicedSegment.h"
@@ -170,6 +175,7 @@ using namespace Kernel::Object;
 using namespace Kernel::Object::Geometry;
 using namespace Kernel::Object::Vision;
 using namespace Kernel::Object::Geometry::Mesh;
+using namespace Kernel::Object::Geometry::Polygons;
 using namespace Kernel::Object::Pattern;
 using namespace Kernel::Object::Print;
 using namespace Kernel::Position;
@@ -191,5 +197,5 @@ using namespace Kernel::Slice::File;
 using namespace Kernel::Unit;
 using namespace Kernel::InterProcess::NamedPipe;
 
-#define	BEGIN_HYENGINE()		\
+#define	BEGIN_RESHAPER3DENGINE()		\
 	CFileBase::Initialize();

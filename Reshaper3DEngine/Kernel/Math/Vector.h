@@ -38,6 +38,8 @@ public:
 	CVector();
 	CVector(const CGPointDouble & iPoint);
 	CVector(const CGPoint2DDouble & iPoint);
+	CVector(const Coordinate2D & iCoordinate);
+	CVector(const Coordinate3D & iCoordinate);
 	CVector(const CVector & iVector);
 	CVector(const CVector2D & iVector);
 	CVector(const CGVertex & iVertex);

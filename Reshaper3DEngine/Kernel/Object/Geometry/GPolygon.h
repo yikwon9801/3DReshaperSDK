@@ -109,7 +109,11 @@ public:
 
 #pragma region CAD Functions
 public:
+	const BOOL				Smooth(const DOUBLE iPara = .5);
+
 	void					ChangeStartingPoint(const UINT iIndex);
+protected:
+	const BOOL				Smooth(const DOUBLE iPara, const Coordinate3D & iPrev, const Coordinate3D & iNext, Coordinate3D & iV);
 
 public:
 	virtual const INT		ProjectOntoMesh(const CGPolyhedron & iPolyhedron, const CVector & iDirection, CGPolygons & oResult);
@@ -182,6 +186,8 @@ public:
 
 #pragma region Static fuction
 public:
+	enum { SPLINE_LINEAR, SPLINE_BEZIERCURVE, SPLINE_BSPLINE, SPLINE_HERMITE, SPLINE_CATMULLROM };
+	static const INT		CreateSplineCurve(const UINT8 iType, const _VertexVector & iControlPoints, const UINT iNumberOfVertices, CGPolygon & oPolygon);
 #pragma endregion
 
 #pragma region Memeber Variable
